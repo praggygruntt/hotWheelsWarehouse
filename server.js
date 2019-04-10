@@ -9,9 +9,26 @@ const WishList      = require('./models/wishlist');
 // Database Creation
 const db = mongoose.connect('mongodb://localhost/hotWheelsWarehouse');
 
-// Middlware
+// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+// Routes
+app.post('/cars', function(req, res) {
+    let newCar = new Car();
+    newCar.name = req.body.name;
+    newCar.price = req.body.price;
+    newCar.image = req.body.image;
+    newCar.save(function(err, newlySavedCar) {
+        if(err) {
+            res.status(500).send({error: "Could not save new car."})
+        } else {
+            res.status(200).send(newlySavedCar);
+        }
+    })
+})
+
+
 
 // Server Start
 app.listen(3000, function() {
