@@ -99,6 +99,15 @@ router.post('/wishlists', function(req, res) {
 });
 
 // DELETE WISHLIST
+router.delete('/wishlists/delete', function(req, res) {
+    WishList.findByIdAndDelete(req.body.wishListID, function(err) {
+        if(err) {
+            res.status(500).send("Could not delete Wishlist at this time")
+        } else {
+            res.status(200).send("Wishlist deleted.")
+        };
+    });
+});
 
 // ***** CART *****
 
