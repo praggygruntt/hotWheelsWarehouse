@@ -51,27 +51,16 @@ router.post('/cars', function(req, res) {
     });
 });
 
-// ADD CAR TO A WISHLIST
-router.put('/wishlists/car/add', function(req, res) {
-    Car.findById(req.body.carID, function(err, foundCar) {
+// DELETE CAR FROM DATABASE
+router.delete('/cars/delete', function(req, res) {
+    Car.findByIdAndDelete(req.body.carID, function(err) {
         if(err) {
-            res.status(500).send({error: "Could not find a Car with that ID"});
+            res.status(500).send("Could not delete Car at this time")
         } else {
-            WishList.findByIdAndUpdate(req.body.wishListID, {$addToSet:{cars: foundCar._id}}, function(err, wishList) {
-                if(err) {
-                    res.status(500).send({error: "Could not add item to WishList"})
-                } else {
-                    res.send(wishList);
-                }
-            })
-        }
+            res.status(200).send("Car deleted.")
+        };
     });
-});
-
-// DELETE CAR FROM WISHLIST
-
-
-
+})
 // ***** WISHLISTS *****
 
 // GET FULL LIST OF WISHLISTS
@@ -109,6 +98,25 @@ router.delete('/wishlists/delete', function(req, res) {
     });
 });
 
+// ADD CAR TO A WISHLIST
+router.put('/wishlists/car/add', function(req, res) {
+    Car.findById(req.body.carID, function(err, foundCar) {
+        if(err) {
+            res.status(500).send({error: "Could not find a Car with that ID"});
+        } else {
+            WishList.findByIdAndUpdate(req.body.wishListID, {$addToSet:{cars: foundCar._id}}, function(err, wishList) {
+                if(err) {
+                    res.status(500).send({error: "Could not add item to WishList"})
+                } else {
+                    res.send(wishList);
+                }
+            })
+        }
+    });
+});
+
+// DELETE CAR FROM WISHLIST
+// !!!!!
 // ***** CART *****
 
 // GET CART
