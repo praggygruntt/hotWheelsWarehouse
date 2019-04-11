@@ -17,6 +17,11 @@ router.use(bodyParser.urlencoded({extended: false}));
 
 // Routes =======================================================================================================
 
+// LANDING PAGE
+router.get('/', function(req, res) {
+    res.send("Welcome to the Hot Wheels Warehouse!");
+});
+
 // GET FULL LIST OF CARS
 router.get('/cars', function(req, res) {
     Car.find({}, function(err, returnedCars) {
