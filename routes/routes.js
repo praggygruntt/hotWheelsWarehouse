@@ -143,6 +143,15 @@ router.put('/cart/cars/add', function(req, res) {
 });
 
 // DELETE CAR FROM CART
+router.delete('/cart/cars/delete', function(req, res) {
+    Cart.findByIdAndUpdate(req.body.cartID, {$pull: {cars: req.body.carID}}, function(err, updatedCart) {
+        if(err) {
+            res.status(500).send("Could not find Cart")
+        } else {
+            res.status(200).send(updatedCart);
+        }
+    });
+});
 
 // DELETE CART
 
