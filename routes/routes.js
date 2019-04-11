@@ -22,6 +22,8 @@ router.get('/', function(req, res) {
     res.send("Welcome to the Hot Wheels Warehouse!");
 });
 
+// **** CARS *****
+
 // GET FULL LIST OF CARS
 router.get('/cars', function(req, res) {
     Car.find({}, function(err, returnedCars) {
@@ -32,6 +34,43 @@ router.get('/cars', function(req, res) {
         };
     });
 });
+
+// ADD NEW CAR TO DATABASE
+router.post('/cars', function(req, res) {
+    let newCar = new Car();
+    newCar.name = req.body.name;
+    newCar.price = req.body.price;
+    newCar.image = req.body.image;
+    newCar.save(function(err, newlySavedCar) {
+        if(err) {
+            res.status(500).send({error: "Could not save new car."})
+        } else {
+            res.status(200).send(newlySavedCar);
+        };
+    });
+});
+
+// ADD CAR TO A WISHLIST
+router.put('/wishlists/car/add', function(req, res) {
+    Car.findById(req.body.carID, function(err, foundCar) {
+        if(err) {
+            res.status(500).send({error: "Could not find a Car with that ID"});
+        } else {
+            WishList.findByIdAndUpdate(req.body.wishListID, {$addToSet:{cars: foundCar._id}}, function(err, wishList) {
+                if(err) {
+                    res.status(500).send({error: "Could not add item to WishList"})
+                } else {
+                    res.send(wishList);
+                }
+            })
+        }
+    });
+});
+
+
+
+
+// ***** WISHLISTS *****
 
 // GET FULL LIST OF WISHLISTS
 router.get("/wishlists", function(req, res) {
@@ -57,37 +96,9 @@ router.post('/wishlists', function(req, res) {
     });
 });
 
-// ADD CAR TO A WISHLIST
-router.put('/wishlists/car/add', function(req, res) {
-    Car.findById(req.body.carID, function(err, foundCar) {
-        if(err) {
-            res.status(500).send({error: "Could not find a Car with that ID"});
-        } else {
-            WishList.findByIdAndUpdate(req.body.wishListID, {$addToSet:{cars: foundCar._id}}, function(err, wishList) {
-                if(err) {
-                    res.status(500).send({error: "Could not add item to WishList"})
-                } else {
-                    res.send(wishList);
-                }
-            })
-        }
-    });
-});
 
-// ADD NEW CAR TO DATABASE
-router.post('/cars', function(req, res) {
-    let newCar = new Car();
-    newCar.name = req.body.name;
-    newCar.price = req.body.price;
-    newCar.image = req.body.image;
-    newCar.save(function(err, newlySavedCar) {
-        if(err) {
-            res.status(500).send({error: "Could not save new car."})
-        } else {
-            res.status(200).send(newlySavedCar);
-        };
-    });
-});
+
+
 
 // Export
 module.exports = router;

@@ -8,5 +8,5 @@ app.use("/", routes);
 
 // Server Start
 app.listen(3000, function() {
-    console.log("Hot Wheels Warehouse running on Port 3000...");
+    console.log("===================================================================\n| -------- Hot Wheels Warehouse running on Port 3000... --------- |\n===================================================================");
 })
