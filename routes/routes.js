@@ -61,6 +61,8 @@ router.delete('/cars/delete', function(req, res) {
         };
     });
 })
+
+
 // ***** WISHLISTS *****
 
 // GET FULL LIST OF WISHLISTS
@@ -99,7 +101,7 @@ router.delete('/wishlists/delete', function(req, res) {
 });
 
 // ADD CAR TO A WISHLIST
-router.put('/wishlists/car/add', function(req, res) {
+router.put('/wishlists/cars/add', function(req, res) {
     Car.findById(req.body.carID, function(err, foundCar) {
         if(err) {
             res.status(500).send({error: "Could not find a Car with that ID"});
@@ -116,7 +118,16 @@ router.put('/wishlists/car/add', function(req, res) {
 });
 
 // DELETE CAR FROM WISHLIST
-// !!!!!
+router.delete("/wishlists/cars/delete", function(req, res) {
+    WishList.findByIdAndUpdate(req.body.wishListID, {$pull: {cars: req.body.carID}}, function(err, updatedWishlist) {
+        if(err) {
+            res.status(500).send("Could not remove car from Wishlist")
+        } else {
+            res.status(200).send(updatedWishlist);
+        }
+    });
+});
+
 // ***** CART *****
 
 // GET CART
