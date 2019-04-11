@@ -10,6 +10,7 @@ const db = mongoose.connect('mongodb://localhost/hotWheelsWarehouse');
 // Model Imports
 const Car           = require('../models/cars');
 const WishList      = require('../models/wishlist');
+const Cart          = require('../models/cart');
 
 // Middleware
 router.use(bodyParser.json());
@@ -67,6 +68,7 @@ router.put('/wishlists/car/add', function(req, res) {
     });
 });
 
+// DELETE CAR FROM WISHLIST
 
 
 
@@ -96,7 +98,38 @@ router.post('/wishlists', function(req, res) {
     });
 });
 
+// DELETE WISHLIST
 
+// ***** CART *****
+
+// GET CART
+router.get('/cart', function(req, res) {
+    Cart.find({}).populate('cars').exec(function(err, foundCarts) {
+        if(err) {
+            res.status(500).send("Could not find Cart");
+        } else {
+            res.status(200).send(foundCarts);
+        };
+    });
+});
+
+// MAKE A CART
+router.post('/cart', function(req, res) {
+    let cart = new Cart();
+    cart.save(function(err, newCart) {
+        if(err) {
+            res.status(500).send("Could not create new cart");
+        } else {
+            res.status(200).send(newCart);
+        };
+    });
+});
+
+// ADD CAR TO CART
+
+// DELETE CAR FROM CART
+
+// DELETE CART
 
 
 
