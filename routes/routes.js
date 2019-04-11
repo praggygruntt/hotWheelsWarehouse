@@ -126,6 +126,21 @@ router.post('/cart', function(req, res) {
 });
 
 // ADD CAR TO CART
+router.put('/cart/cars/add', function(req, res) {
+    Car.findById(req.body.carID, function(err, foundCar) {
+        if(err) {
+            res.status(500).send({error: "Could not find a Car with that ID"});
+        } else {
+            Cart.findByIdAndUpdate(req.body.cartID, {$addToSet:{cars: foundCar._id}}, function(err, cart) {
+                if(err) {
+                    res.status(500).send({error: "Could not add item to Cart"})
+                } else {
+                    res.send(cart);
+                }
+            })
+        }
+    });
+});
 
 // DELETE CAR FROM CART
 
