@@ -154,7 +154,15 @@ router.delete('/cart/cars/delete', function(req, res) {
 });
 
 // DELETE CART
-
+router.delete('/cart/delete', function(req, res) {
+    Cart.findByIdAndDelete(req.body.cartID, function(err) {
+        if(err) {
+            res.status(500).send("Could not delete Cart at this time")
+        } else {
+            res.status(200).send("Cart deleted.")
+        };
+    });
+});
 
 
 // Export
